@@ -8,23 +8,23 @@
 import Foundation
 
 struct ErrorlessTracker {
-    func trackViewDidLoad() {
-        print("SWIZZLING: ViewDidLoad")
+    func trackViewDidLoad(message: String) {
+        print("SWIZZLING: ViewDidLoad: \(message)")
     }
     
-    func trackViewWillAppear() {
-        print("SWIZZLING: viewWillAppear")
+    func trackViewWillAppear(message: String) {
+        print("SWIZZLING: viewWillAppear: \(message)")
     }
     
-    func trackViewWillDisappear() {
-        print("SWIZZLING: viewWillDisappear")
+    func trackViewWillDisappear(message: String) {
+        print("SWIZZLING: viewWillDisappear: \(message)")
     }
     
-    func trackPortrait() {
-        print("trackPortrait")
+    func trackPortrait(message: String) {
+        print("trackPortrait: \(message)")
     }
     
-    func trackLandscape() {
-        print("trackLandscape")
+    func trackLandscape(message: String) {
+        print("trackLandscape: \(message)")
     }
 }

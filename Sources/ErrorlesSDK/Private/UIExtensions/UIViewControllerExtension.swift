@@ -12,7 +12,7 @@ extension UIViewController {
     
     @objc func viewDidLoadSwizzlingMethod() {
         viewDidLoadSwizzlingMethod()
-        ErrorlessTracker().trackViewDidLoad()
+        ErrorlessTracker().trackViewDidLoad(message: "\(type(of: self))")
     }
     
     static func startSwizzlingViewDidLoad() {
@@ -29,7 +29,7 @@ extension UIViewController {
     
     @objc func viewWillAppearSwizzlingMethod() {
         viewWillAppearSwizzlingMethod()
-        ErrorlessTracker().trackViewWillAppear()
+        ErrorlessTracker().trackViewWillAppear(message: "\(type(of: self))")
     }
     
     static func startSwizzlingViewWillAppear() {
@@ -46,7 +46,7 @@ extension UIViewController {
     
     @objc func viewWillDisappearSwizzlingMethod() {
         viewWillDisappearSwizzlingMethod()
-        ErrorlessTracker().trackViewWillDisappear()
+        ErrorlessTracker().trackViewWillDisappear(message: "\(type(of: self))")
     }
     
     static func startSwizzlingViewWillDisappear() {
