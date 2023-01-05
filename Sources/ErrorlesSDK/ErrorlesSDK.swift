@@ -5,7 +5,8 @@ public struct ErrorlesSDK {
         self.apiKey = apiKey
     }
     
-    public func start() {
+    public func initalizeSDK() {
+        ErrorlessNotificationService().initalize()
         ErrorlessUISwizzlings().swizzle()
     }
 }
