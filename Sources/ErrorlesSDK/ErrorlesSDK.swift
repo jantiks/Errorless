@@ -1,6 +1,11 @@
 public struct ErrorlesSDK {
-    public private(set) var text = "Hello, World!"
-
-    public init() {
+    private let apiKey: String
+    
+    public init(apiKey: String) {
+        self.apiKey = apiKey
+    }
+    
+    func start() {
+        
     }
 }

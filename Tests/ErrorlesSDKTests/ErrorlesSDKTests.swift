@@ -6,6 +6,6 @@ final class ErrorlesSDKTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(ErrorlesSDK().text, "Hello, World!")
+//        XCTAssertEqual(ErrorlesSDK().text, "Hello, World!")
     }
 }
