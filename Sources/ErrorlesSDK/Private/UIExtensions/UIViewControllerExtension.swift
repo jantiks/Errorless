@@ -51,7 +51,7 @@ extension UIViewController {
     
     static func startSwizzlingViewWillDisappear() {
         let defaultSelector = #selector(viewWillDisappear)
-        let newSelector = #selector(viewDidLoadSwizzlingMethod)
+        let newSelector = #selector(viewWillDisappearSwizzlingMethod)
         
         let defaultInstace = class_getInstanceMethod(UIViewController.self, defaultSelector)
         let newInstance = class_getInstanceMethod(UIViewController.self, newSelector)
