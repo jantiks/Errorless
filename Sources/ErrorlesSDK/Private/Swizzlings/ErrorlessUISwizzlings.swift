@@ -11,6 +11,8 @@ import UIKit
 struct ErrorlessUISwizzlings {
     func swizzle() {
         UIViewController.startSwizzlingViewDidLoad()
+        UIViewController.startSwizzlingViewWillAppear()
+        UIViewController.startSwizzlingViewWillDisappear()
     }
 }
 #endif
