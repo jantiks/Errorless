@@ -1,2 +1,3 @@
-# Errorless
-UIKit error tracking SDK
+# ErrorlesSDK
+
+A description of this package.
