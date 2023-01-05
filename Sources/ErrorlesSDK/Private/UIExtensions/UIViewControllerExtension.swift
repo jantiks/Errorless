@@ -16,15 +16,7 @@ extension UIViewController {
     }
     
     static func startSwizzlingViewDidLoad() {
-        let defaultSelector = #selector(viewDidLoad)
-        let newSelector = #selector(viewDidLoadSwizzlingMethod)
-        
-        let defaultInstace = class_getInstanceMethod(UIViewController.self, defaultSelector)
-        let newInstance = class_getInstanceMethod(UIViewController.self, newSelector)
-        
-        if let instance1 = defaultInstace, let instance2 = newInstance {
-            method_exchangeImplementations(instance1, instance2)
-        }
+        swizzle(defaultSelector: #selector(viewDidLoad), with: #selector(viewDidLoadSwizzlingMethod))
     }
     
     @objc func viewWillAppearSwizzlingMethod() {
@@ -33,15 +25,7 @@ extension UIViewController {
     }
     
     static func startSwizzlingViewWillAppear() {
-        let defaultSelector = #selector(viewWillAppear)
-        let newSelector = #selector(viewWillAppearSwizzlingMethod)
-        
-        let defaultInstace = class_getInstanceMethod(UIViewController.self, defaultSelector)
-        let newInstance = class_getInstanceMethod(UIViewController.self, newSelector)
-        
-        if let instance1 = defaultInstace, let instance2 = newInstance {
-            method_exchangeImplementations(instance1, instance2)
-        }
+        swizzle(defaultSelector: #selector(viewWillAppear), with: #selector(viewWillAppearSwizzlingMethod))
     }
     
     @objc func viewWillDisappearSwizzlingMethod() {
@@ -50,9 +34,10 @@ extension UIViewController {
     }
     
     static func startSwizzlingViewWillDisappear() {
-        let defaultSelector = #selector(viewWillDisappear)
-        let newSelector = #selector(viewWillDisappearSwizzlingMethod)
-        
+        swizzle(defaultSelector: #selector(viewWillDisappear), with: #selector(viewWillDisappearSwizzlingMethod))
+    }
+    
+    static func swizzle(defaultSelector: Selector, with newSelector: Selector) {
         let defaultInstace = class_getInstanceMethod(UIViewController.self, defaultSelector)
         let newInstance = class_getInstanceMethod(UIViewController.self, newSelector)
         
