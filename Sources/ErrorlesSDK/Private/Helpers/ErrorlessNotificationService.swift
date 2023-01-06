@@ -5,7 +5,6 @@
 //  Created by Tigran on 05.01.23.
 //
 
-import Foundation
 import UIKit
 
 class ErrorlessNotificationService {

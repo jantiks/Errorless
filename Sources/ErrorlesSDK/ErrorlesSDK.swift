@@ -8,5 +8,6 @@ public struct ErrorlesSDK {
     public func initalizeSDK() {
         ErrorlessNotificationService().initalize()
         ErrorlessUISwizzlings().swizzle()
+        ErrorlessCrashReporter().initalize()
     }
 }
