@@ -10,13 +10,21 @@ import UIKit
 
 extension UIViewController {
     
+    static func startSwizzlingViewDidLoad() {
+        swizzle(defaultSelector: #selector(viewDidLoad), with: #selector(viewDidLoadSwizzlingMethod))
+    }
+    
+    static func startSwizzlingViewWillDisappear() {
+        swizzle(defaultSelector: #selector(viewWillDisappear), with: #selector(viewWillDisappearSwizzlingMethod))
+    }
+    
+    static func startSwizzlingViewWillAppear() {
+        swizzle(defaultSelector: #selector(viewWillAppear), with: #selector(viewWillAppearSwizzlingMethod))
+    }
+    
     @objc func viewDidLoadSwizzlingMethod() {
         viewDidLoadSwizzlingMethod()
         ErrorlessTracker().trackViewDidLoad(message: "\(type(of: self))")
-    }
-    
-    static func startSwizzlingViewDidLoad() {
-        swizzle(defaultSelector: #selector(viewDidLoad), with: #selector(viewDidLoadSwizzlingMethod))
     }
     
     @objc func viewWillAppearSwizzlingMethod() {
@@ -24,17 +32,9 @@ extension UIViewController {
         ErrorlessTracker().trackViewWillAppear(message: "\(type(of: self))")
     }
     
-    static func startSwizzlingViewWillAppear() {
-        swizzle(defaultSelector: #selector(viewWillAppear), with: #selector(viewWillAppearSwizzlingMethod))
-    }
-    
     @objc func viewWillDisappearSwizzlingMethod() {
         viewWillDisappearSwizzlingMethod()
         ErrorlessTracker().trackViewWillDisappear(message: "\(type(of: self))")
-    }
-    
-    static func startSwizzlingViewWillDisappear() {
-        swizzle(defaultSelector: #selector(viewWillDisappear), with: #selector(viewWillDisappearSwizzlingMethod))
     }
     
     static func swizzle(defaultSelector: Selector, with newSelector: Selector) {

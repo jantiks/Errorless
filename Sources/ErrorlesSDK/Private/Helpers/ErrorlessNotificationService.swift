@@ -15,11 +15,11 @@ class ErrorlessNotificationService {
     
     @objc private func rotated() {
         if UIDevice.current.orientation.isLandscape {
-            ErrorlessTracker().trackLandscape(message: "asd")
+            ErrorlessTracker().trackLandscape(message: "")
         }
 
         if UIDevice.current.orientation.isPortrait {
-            ErrorlessTracker().trackPortrait(message: "asd")
+            ErrorlessTracker().trackPortrait(message: "")
         }
     }
 }
