@@ -24,7 +24,17 @@ let package = Package(
             dependencies: [
                 .product(name: "CrashReporter", package: "plcrashreporter")
             ],
-            path: "Sources"),
+            path: "Swift/Sources"),
+        .target(
+            name: "ErrorlessCrashReporter",
+            dependencies: [
+                .product(name: "CrashReporter", package: "plcrashreporter")
+            ],
+            path: "Objc/Sources/",
+            publicHeadersPath: "Objc/Sources/ErrorlessCrashReporter/include",
+            cSettings: [
+                 .headerSearchPath("Objc/Sources/ErrorlessCrashReporter/**"),
+             ]),
         .testTarget(
             name: "ErrorlesSDKTests",
             dependencies: [
