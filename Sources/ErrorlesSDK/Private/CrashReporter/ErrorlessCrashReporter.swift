@@ -9,19 +9,17 @@ import CrashReporter
 
 struct ErrorlessCrashReporter {
     func initalize() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            guard let crashReporter = PLCrashReporter.shared() else {
-                return
-            }
-
-            if crashReporter.hasPendingCrashReport() {
-                handleCrashReport(crashReporter)
-            }
-
-            if !crashReporter.enable() {
-                print("Could not enable crash reporter")
-            }
-        })
+        guard let crashReporter = PLCrashReporter.shared() else {
+            return
+        }
+        
+        if crashReporter.hasPendingCrashReport() {
+            handleCrashReport(crashReporter)
+        }
+        
+        if !crashReporter.enable() {
+            print("Could not enable crash reporter")
+        }
     }
 
     func handleCrashReport(_ crashReporter: PLCrashReporter) {
