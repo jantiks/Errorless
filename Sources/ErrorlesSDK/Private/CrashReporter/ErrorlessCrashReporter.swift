@@ -9,7 +9,7 @@ import CrashReporter
 
 struct ErrorlessCrashReporter {
     func initalize() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+        DispatchQueue.main.async {
             let config = PLCrashReporterConfig(signalHandlerType: .mach, symbolicationStrategy: [])
             guard let crashReporter = PLCrashReporter(configuration: config) else {
                 print("Could not create an instance of PLCrashReporter")
@@ -44,6 +44,6 @@ struct ErrorlessCrashReporter {
             
             // Purge the report.
             crashReporter.purgePendingCrashReport()
-        })
+        }
     }
 }
