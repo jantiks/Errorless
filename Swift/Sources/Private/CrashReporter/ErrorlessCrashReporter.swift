@@ -36,6 +36,7 @@ struct ErrorlessCrashReporter {
                     // We could send the report from here, but we'll just print out some debugging info instead.
                     if let text = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS) {
                         let vc = UIAlertController(title: "Crash", message: text, preferredStyle: .alert)
+                        vc.addAction(UIAlertAction(title: "OK", style: .default))
                         UIApplication.shared.windows[0].rootViewController?.present(vc, animated: true)
                     } else {
                         print("CrashReporter: can't convert report to text")
