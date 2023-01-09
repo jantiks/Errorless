@@ -7,7 +7,6 @@
 
 import CrashReporter
 import UIKit
-import Foundation
 
 struct ErrorlessCrashReporter {
     func initalize() {
