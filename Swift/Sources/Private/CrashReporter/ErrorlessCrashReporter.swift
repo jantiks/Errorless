@@ -55,7 +55,7 @@ struct ErrorlessCrashReporter {
     private func postCrash(_ crashStr: String) {
         var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
         req.httpBody = crashStr.data(using: .utf8)!
-        
+        req.httpMethod = "POST"
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
         }.resume()
