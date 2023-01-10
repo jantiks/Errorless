@@ -35,9 +35,10 @@ struct ErrorlessCrashReporter {
                     let report = try PLCrashReport(data: data)
                     // We could send the report from here, but we'll just print out some debugging info instead.
                     if let text = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS) {
-                        let vc = UIAlertController(title: "Crash", message: text, preferredStyle: .alert)
-                        vc.addAction(UIAlertAction(title: "OK", style: .default))
-                        UIApplication.shared.windows[0].rootViewController?.present(vc, animated: true)
+//                        let vc = UIAlertController(title: "Crash", message: text, preferredStyle: .alert)
+//                        vc.addAction(UIAlertAction(title: "OK", style: .default))
+//                        UIApplication.shared.windows[0].rootViewController?.present(vc, animated: true)
+                        postCrash(text)
                     } else {
                         print("CrashReporter: can't convert report to text")
                     }
@@ -49,6 +50,15 @@ struct ErrorlessCrashReporter {
             // Purge the report.
             crashReporter.purgePendingCrashReport()
         }
+    }
+    
+    private func postCrash(_ crashStr: String) {
+        var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
+        req.httpBody = crashStr.data(using: .utf8)!
+        
+        URLSession.shared.dataTask(with: req) { data, response, error in
+            print((response as? HTTPURLResponse)?.statusCode)
+        }.resume()
     }
     
     private func amIBeingDebugged() -> Bool {
