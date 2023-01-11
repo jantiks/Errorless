@@ -33,15 +33,7 @@ struct ErrorlessCrashReporter {
 
                     // Retrieving crash reporter data.
                     let report = try PLCrashReport(data: data)
-                    // We could send the report from here, but we'll just print out some debugging info instead.
-                    if let text = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS) {
-//                        let vc = UIAlertController(title: "Crash", message: text, preferredStyle: .alert)
-//                        vc.addAction(UIAlertAction(title: "OK", style: .default))
-//                        UIApplication.shared.windows[0].rootViewController?.present(vc, animated: true)
-                        postCrash(text)
-                    } else {
-                        print("CrashReporter: can't convert report to text")
-                    }
+                    postCrash(data)
                 } catch let error {
                     print("CrashReporter failed to load and parse with error: \(error)")
                 }
@@ -52,9 +44,9 @@ struct ErrorlessCrashReporter {
         }
     }
     
-    private func postCrash(_ crashStr: String) {
+    private func postCrash(_ data: Data) {
         var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
-        req.httpBody = crashStr.data(using: .utf8)!
+        req.httpBody = data
         req.httpMethod = "POST"
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
