@@ -30,10 +30,12 @@ struct ErrorlessCrashReporter {
             if crashReporter.hasPendingCrashReport() {
                 do {
                     let data = try crashReporter.loadPendingCrashReportDataAndReturnError()
-
+                    
                     // Retrieving crash reporter data.
                     let report = try PLCrashReport(data: data)
-                    postCrash(data)
+                    let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
+                    print("Report: \(crash)")
+                    postCrash(crash)
                 } catch let error {
                     print("CrashReporter failed to load and parse with error: \(error)")
                 }
@@ -44,9 +46,10 @@ struct ErrorlessCrashReporter {
         }
     }
     
-    private func postCrash(_ data: Data) {
+    private func postCrash(_ data: String?) {
         var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
-        req.httpBody = data
+        
+        req.httpBody = try! JSONEncoder().encode(RequestBody(crashRepoort: data ?? ""))
         req.httpMethod = "POST"
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
@@ -61,4 +64,8 @@ struct ErrorlessCrashReporter {
         assert(junk == 0, "sysctl failed")
         return (info.kp_proc.p_flag & P_TRACED) != 0
     }
+}
+
+struct RequestBody: Codable {
+    let crashRepoort: String
 }
