@@ -33,8 +33,13 @@ struct ErrorlessCrashReporter {
                     
                     // Retrieving crash reporter data.
                     let report = try PLCrashReport(data: data)
+                    
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
+                    let outputPath = FileManager.default.temporaryDirectory.appendingPathComponent("app.crash")
+                    try data.write(to: outputPath)
+                    print("asd path \(outputPath)")
                     print("Report: \(crash)")
+                    showMessage(outputPath.absoluteString)
                     postCrash(crash)
                 } catch let error {
                     print("CrashReporter failed to load and parse with error: \(error)")
@@ -63,6 +68,15 @@ struct ErrorlessCrashReporter {
         let junk = sysctl(&mib, UInt32(mib.count), &info, &size, nil, 0)
         assert(junk == 0, "sysctl failed")
         return (info.kp_proc.p_flag & P_TRACED) != 0
+    }
+    
+    private func showMessage(_ message: String) {
+        let ac = UIAlertController(title: "asa", message: "asd", preferredStyle: .alert)
+        ac.addTextField()
+        ac.textFields?.first?.text = message
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        
+        UIApplication.shared.windows.first?.rootViewController?.present(ac, animated: true)
     }
 }
 
