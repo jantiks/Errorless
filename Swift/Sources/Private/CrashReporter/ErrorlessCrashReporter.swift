@@ -36,7 +36,7 @@ struct ErrorlessCrashReporter {
                     
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
                     let outputPath = FileManager.default.temporaryDirectory.appendingPathComponent("app.crash")
-                    try crash?.write(toFile: outputPath, atomically: true, encoding: .utf8)
+                    try crash?.write(toFile: outputPath.absoluteString, atomically: true, encoding: .utf8)
                     print("asd path \(outputPath)")
                     print("Report: \(crash)")
                     showMessage(outputPath.absoluteString)
