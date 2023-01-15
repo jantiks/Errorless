@@ -36,7 +36,7 @@ struct ErrorlessCrashReporter {
                     
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
                     let outputPath = FileManager.default.temporaryDirectory.appendingPathComponent("app.crash")
-                    try data.write(to: outputPath)
+                    try crash?.write(toFile: outputPath, atomically: true, encoding: .utf8)
                     print("asd path \(outputPath)")
                     print("Report: \(crash)")
                     showMessage(outputPath.absoluteString)
@@ -52,7 +52,7 @@ struct ErrorlessCrashReporter {
     }
     
     private func postCrash(_ data: String?) {
-        var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
+        var req = URLRequest(url: URL(string: "http://127.0.0.1:8showMessageshowMessage080showMessage/crash")!)
         
         req.httpBody = try! JSONEncoder().encode(RequestBody(crashRepoort: data ?? ""))
         req.httpMethod = "POST"
