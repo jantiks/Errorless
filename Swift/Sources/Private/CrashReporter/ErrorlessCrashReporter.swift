@@ -52,7 +52,7 @@ struct ErrorlessCrashReporter {
     }
     
     private func postCrash(_ data: String?) {
-        var req = URLRequest(url: URL(string: "http://127.0.0.1:8showMessageshowMessage080showMessage/crash")!)
+        var req = URLRequest(url: URL(string: "http://127.0.0.1:8/crash")!)
         
         req.httpBody = try! JSONEncoder().encode(RequestBody(crashRepoort: data ?? ""))
         req.httpMethod = "POST"
