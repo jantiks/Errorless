@@ -10,7 +10,10 @@ import UIKit
 
 struct ErrorlessCrashReporter {
     func initalize() {
-        guard !amIBeingDebugged() else { return }
+        guard !amIBeingDebugged() else {
+            showMessage("I am not being debugged")
+            return
+        }
         
         DispatchQueue.main.async {
             let config = PLCrashReporterConfig(signalHandlerType: .mach, symbolicationStrategy: [])
