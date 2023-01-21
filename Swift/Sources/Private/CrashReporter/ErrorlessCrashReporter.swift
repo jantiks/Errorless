@@ -38,11 +38,7 @@ struct ErrorlessCrashReporter {
                     let report = try PLCrashReport(data: data)
                     
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
-                    let outputPath = FileManager.default.temporaryDirectory.appendingPathComponent("app.crash")
-                    try crash?.write(toFile: outputPath.absoluteString, atomically: true, encoding: .utf8)
-                    print("asd path \(outputPath)")
                     print("Report: \(crash)")
-                    showMessage(outputPath.absoluteString)
                     postCrash(crash)
                 } catch let error {
                     print("CrashReporter failed to load and parse with error: \(error)")
