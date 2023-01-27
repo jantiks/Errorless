@@ -42,9 +42,11 @@ struct ErrorlessCrashReporter {
                     
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
 
-                    let outputPath = getDocumentsDirectory().appendingPathComponent("app.txt")
+                    let outputPath = getDocumentsDirectory().appendingPathComponent("app.crash")
                     do {
                         try crash?.write(to: outputPath, atomically: true, encoding: .utf8)
+                        dump(outputPath.absoluteString)
+                        dump("data \(try! Data(contentsOf: outputPath))")
                         postCrash(try! Data(contentsOf: outputPath))
                         print("Saved crash report to: \(outputPath)")
                     } catch {
