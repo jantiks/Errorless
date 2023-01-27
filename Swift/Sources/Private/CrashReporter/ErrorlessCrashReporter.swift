@@ -74,6 +74,8 @@ struct ErrorlessCrashReporter {
                 self.dump(error.localizedDescription)
             }
             
+            dump(response?.description)
+            
         }.resume()
     }
     
