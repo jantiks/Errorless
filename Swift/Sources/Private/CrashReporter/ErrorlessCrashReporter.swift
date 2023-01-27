@@ -69,6 +69,7 @@ struct ErrorlessCrashReporter {
         var req = URLRequest(url: URL(string: k_BASE_URL + "crash")!)
         
         req.httpMethod = "POST"
+        req.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
         URLSession.shared.uploadTask(with: req, from: data) { data, response, error in
             if let error = error {
                 self.dump(error.localizedDescription)
