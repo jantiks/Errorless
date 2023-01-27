@@ -47,7 +47,7 @@ struct ErrorlessCrashReporter {
                         try crash?.write(to: outputPath, atomically: true, encoding: .utf8)
                         dump(outputPath.absoluteString)
                         dump("data \(try! Data(contentsOf: outputPath))")
-                        postCrash(try! Data(contentsOf: outputPath))
+                        postCrash(outputPath)
                         print("Saved crash report to: \(outputPath)")
                     } catch {
                         print("Failed to write crash report")
@@ -67,13 +67,13 @@ struct ErrorlessCrashReporter {
         return FileManager.default.temporaryDirectory
     }
     
-    private func postCrash(_ data: Data) {
+    private func postCrash(_ file: URL) {
         var req = URLRequest(url: URL(string: k_BASE_URL + "crash")!)
         
         req.httpMethod = "POST"
-        req.httpBody = data
+        req.httpBody = try! Data(contentsOf: file)
         req.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: req) { data, response, error in
+        URLSession.shared.uploadTask(with: req, fromFile: file) { data, response, error in
             if let error = error {
                 self.dump(error.localizedDescription)
             }
