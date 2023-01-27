@@ -68,19 +68,28 @@ struct ErrorlessCrashReporter {
     }
     
     private func postCrash(_ file: URL) {
-        var req = URLRequest(url: URL(string: k_BASE_URL + "crash")!)
-        
-        req.httpMethod = "POST"
-        req.httpBody = try! Data(contentsOf: file)
-        req.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.uploadTask(with: req, fromFile: file) { data, response, error in
+        let request = NSMutableURLRequest(url: URL(string: k_BASE_URL + "crash")!)
+        request.httpMethod = "POST"
+        let boundary = "Boundary-\(UUID().uuidString)"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        let data = try! Data(contentsOf: file)
+        let body = NSMutableData()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(file.lastPathComponent)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: application/vnd.apple.crashreport\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body as Data
+
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
             if let error = error {
                 self.dump(error.localizedDescription)
             }
-            
-            dump(response?.description ?? "Not desc")
-            
-        }.resume()
+        }
+        task.resume()
     }
     
     private func amIBeingDebugged() -> Bool {
