@@ -38,8 +38,15 @@ struct ErrorlessCrashReporter {
                     let report = try PLCrashReport(data: data)
                     
                     let crash = PLCrashReportTextFormatter.stringValue(for: report, with: PLCrashReportTextFormatiOS)
-                    print("Report: \(crash)")
-                    postCrash(crash)
+
+                    let outputPath = getDocumentsDirectory().appendingPathComponent("app.crash")
+                    do {
+                        try crash?.write(to: outputPath, atomically: true, encoding: .utf8)
+                        postCrash(try! Data(contentsOf: outputPath))
+                        print("Saved crash report to: \(outputPath)")
+                    } catch {
+                        print("Failed to write crash report")
+                    }
                 } catch let error {
                     print("CrashReporter failed to load and parse with error: \(error)")
                 }
@@ -50,11 +57,19 @@ struct ErrorlessCrashReporter {
         }
     }
     
-    private func postCrash(_ data: String?) {
-        var req = URLRequest(url: URL(string: "http://127.0.0.1:8080/crash")!)
+    private func getDocumentsDirectory() -> URL {
+        // find all possible documents directories for this user
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+
+        // just send back the first one, which ought to be the only one
+        return paths[0]
+    }
+    
+    private func postCrash(_ data: Data) {
+        var req = URLRequest(url: URL(string: "http://127.0.0.1:8000/crash")!)
         
-        req.httpBody = try! JSONEncoder().encode(RequestBody(crashRepoort: data ?? ""))
         req.httpMethod = "POST"
+        URLSession.shared.uploadTask(with: req, from: data)
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
         }.resume()
