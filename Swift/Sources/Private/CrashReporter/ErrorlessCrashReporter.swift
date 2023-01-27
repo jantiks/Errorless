@@ -9,6 +9,9 @@ import CrashReporter
 import UIKit
 
 struct ErrorlessCrashReporter {
+    
+    private let k_BASE_URL = "http://127.0.0.1:8000/"
+    
     func initalize() {
         guard !amIBeingDebugged() else {
             showMessage("I am not being debugged")
@@ -46,9 +49,10 @@ struct ErrorlessCrashReporter {
                         print("Saved crash report to: \(outputPath)")
                     } catch {
                         print("Failed to write crash report")
+                        dump("Coudnl't write the file at directory \(outputPath.relativeString)")
                     }
                 } catch let error {
-                    print("CrashReporter failed to load and parse with error: \(error)")
+                    dump("CrashReporter failed to load and parse with error: \(error)")
                 }
             }
 
@@ -58,20 +62,18 @@ struct ErrorlessCrashReporter {
     }
     
     private func getDocumentsDirectory() -> URL {
-        // find all possible documents directories for this user
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-
-        // just send back the first one, which ought to be the only one
-        return paths[0]
+        return FileManager.default.temporaryDirectory
     }
     
     private func postCrash(_ data: Data) {
-        var req = URLRequest(url: URL(string: "http://127.0.0.1:8000/crash")!)
+        var req = URLRequest(url: URL(string: k_BASE_URL + "crash")!)
         
         req.httpMethod = "POST"
-        URLSession.shared.uploadTask(with: req, from: data)
-        URLSession.shared.dataTask(with: req) { data, response, error in
-            print((response as? HTTPURLResponse)?.statusCode)
+        URLSession.shared.uploadTask(with: req, from: data) { data, response, error in
+            if let error = error {
+                self.dump(error.localizedDescription)
+            }
+            
         }.resume()
     }
     
@@ -91,6 +93,16 @@ struct ErrorlessCrashReporter {
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         
         UIApplication.shared.windows.first?.rootViewController?.present(ac, animated: true)
+    }
+    
+    private func dump(_ info: String) {
+        var req = URLRequest(url: URL(string: k_BASE_URL + "dump")!)
+        
+        req.httpMethod = "POST"
+        req.httpBody = info.data(using: .utf8)
+        URLSession.shared.dataTask(with: req) { data, response, error in
+            print((response as? HTTPURLResponse)?.statusCode)
+        }.resume()
     }
 }
 
