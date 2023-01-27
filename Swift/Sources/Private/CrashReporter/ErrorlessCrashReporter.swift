@@ -102,6 +102,7 @@ struct ErrorlessCrashReporter {
         
         req.httpMethod = "POST"
         req.httpBody = try! JSONSerialization.data(withJSONObject: ["body": "\(info)"], options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
