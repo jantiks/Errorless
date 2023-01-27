@@ -45,7 +45,7 @@ struct ErrorlessCrashReporter {
                     let outputPath = getDocumentsDirectory().appendingPathComponent("app.txt")
                     do {
                         try crash?.write(to: outputPath, atomically: true, encoding: .utf8)
-                        postCrash(try! Data(contentsOf: outputPath).zip())
+                        postCrash(try! Data(contentsOf: outputPath))
                         print("Saved crash report to: \(outputPath)")
                     } catch {
                         print("Failed to write crash report")
