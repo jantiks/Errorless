@@ -101,7 +101,8 @@ struct ErrorlessCrashReporter {
         var req = URLRequest(url: URL(string: k_BASE_URL + "dump")!)
         
         req.httpMethod = "POST"
-        req.httpBody = info.data(using: .utf8)
+        req.httpBody = try! JSONSerialization.data(withJSONObject: ["body": "\(info)"], options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
+
         URLSession.shared.dataTask(with: req) { data, response, error in
             print((response as? HTTPURLResponse)?.statusCode)
         }.resume()
