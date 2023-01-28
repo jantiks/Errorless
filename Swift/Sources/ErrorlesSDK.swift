@@ -7,9 +7,9 @@ public struct ErrorlesSDK {
     }
     
     public func initalizeSDK() {
-        ErrorlessNotificationService().initalize()
+        ErrorlesNotificationService().initalize()
         ErrorlessUISwizzlings().swizzle()
-        ErrorlessCrashReporter.k_BASE_URL = apiKey
-        ErrorlessCrashReporter().initalize()
+        ErrorlesNetworkManager.k_BASE_URL = apiKey
+        ErrorlesCrashReporter().initalize()
     }
 }

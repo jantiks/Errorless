@@ -7,18 +7,18 @@
 
 import UIKit
 
-class ErrorlessNotificationService {
+class ErrorlesNotificationService {
     func initalize() {
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     @objc private func rotated() {
         if UIDevice.current.orientation.isLandscape {
-            ErrorlessTracker().trackLandscape(message: "")
+            ErrorlessTracker().track(.changeToLandscape)
         }
 
         if UIDevice.current.orientation.isPortrait {
-            ErrorlessTracker().trackPortrait(message: "")
+            ErrorlessTracker().track(.changeToPortrait)
         }
     }
 }

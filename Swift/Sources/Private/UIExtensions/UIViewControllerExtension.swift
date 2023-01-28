@@ -24,17 +24,17 @@ extension UIViewController {
     
     @objc func viewDidLoadSwizzlingMethod() {
         viewDidLoadSwizzlingMethod()
-        ErrorlessTracker().trackViewDidLoad(message: "\(type(of: self))")
+        ErrorlessTracker().track(.viewDidLoad)
     }
     
     @objc func viewWillAppearSwizzlingMethod() {
         viewWillAppearSwizzlingMethod()
-        ErrorlessTracker().trackViewWillAppear(message: "\(type(of: self))")
+        ErrorlessTracker().track(.viewWillAppear)
     }
     
     @objc func viewWillDisappearSwizzlingMethod() {
         viewWillDisappearSwizzlingMethod()
-        ErrorlessTracker().trackViewWillDisappear(message: "\(type(of: self))")
+        ErrorlessTracker().track(.viewWillDisappear)
     }
     
     static func swizzle(defaultSelector: Selector, with newSelector: Selector) {

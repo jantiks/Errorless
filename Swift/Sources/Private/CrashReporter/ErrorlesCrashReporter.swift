@@ -8,7 +8,7 @@
 import CrashReporter
 import UIKit
 
-struct ErrorlessCrashReporter {
+struct ErrorlesCrashReporter {
     
     static var k_BASE_URL = "http://127.0.0.1:8000/"
     
@@ -67,28 +67,7 @@ struct ErrorlessCrashReporter {
     }
     
     private func postCrash(_ file: URL) {
-        let request = NSMutableURLRequest(url: URL(string: ErrorlessCrashReporter.k_BASE_URL + "crash")!)
-        request.httpMethod = "POST"
-        let boundary = "Boundary-\(UUID().uuidString)"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
-        let data = try! Data(contentsOf: file)
-        let body = NSMutableData()
-        body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(file.lastPathComponent)\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: application/vnd.apple.crashreport\r\n\r\n".data(using: .utf8)!)
-        body.append(data)
-        body.append("\r\n".data(using: .utf8)!)
-        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
-
-        request.httpBody = body as Data
-
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
-            if let error = error {
-                self.dump(error.localizedDescription)
-            }
-        }
-        task.resume()
+        PostCrashCommand(file: file).execute()
     }
     
     private func amIBeingDebugged() -> Bool {
@@ -101,14 +80,17 @@ struct ErrorlessCrashReporter {
     }
     
     private func dump(_ info: String) {
-        var req = URLRequest(url: URL(string: ErrorlessCrashReporter.k_BASE_URL + "dump")!)
-        
-        req.httpMethod = "POST"
-        req.httpBody = try! JSONSerialization.data(withJSONObject: ["body": "\(info)"], options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: req) { data, response, error in
-            print((response as? HTTPURLResponse)?.statusCode)
-        }.resume()
+//        var req = URLRequest(url: URL(string: ErrorlesCrashReporter.k_BASE_URL + "dump")!)
+//
+//        req.httpMethod = "POST"
+//        req.httpBody = try! JSONSerialization.data(withJSONObject: ["body": "\(info)"], options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
+//        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        URLSession.shared.dataTask(with: req) { data, response, error in
+//            print((response as? HTTPURLResponse)?.statusCode)
+//        }.resume()
+//
+//
+        ErrorlessTracker().dump(DumpRequestBody(eventName: "CrashReporter", body: info))
     }
 }

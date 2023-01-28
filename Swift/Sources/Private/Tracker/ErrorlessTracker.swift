@@ -8,23 +8,22 @@
 import Foundation
 
 struct ErrorlessTracker {
-    func trackViewDidLoad(message: String) {
-        print("SWIZZLING: ViewDidLoad: \(message)")
+    
+    public func dump(_ body: DumpRequestBody, completion: ((Result<BaseResponseBody, Error>) -> Void)? = nil) {
+        ErrorlesNetworkManager("dump")
+            .setHttpMethod(.post)
+            .setJsonHeaders()
+            .addAuthorization()
+            .setBody(body)
+            .startRequest(ofType: BaseResponseBody.self, completion: completion)
     }
     
-    func trackViewWillAppear(message: String) {
-        print("SWIZZLING: viewWillAppear: \(message)")
-    }
-    
-    func trackViewWillDisappear(message: String) {
-        print("SWIZZLING: viewWillDisappear: \(message)")
-    }
-    
-    func trackPortrait(message: String) {
-        print("trackPortrait: \(message)")
-    }
-    
-    func trackLandscape(message: String) {
-        print("trackLandscape: \(message)")
+    func track(_ event: TrackEvent) {
+        ErrorlesNetworkManager("event")
+            .setHttpMethod(.post)
+            .setJsonHeaders()
+            .addAuthorization()
+            .setBody(TrackEventRequestBody(event: event.rawValue))
+            .startRequest(ofType: BaseResponseBody.self)
     }
 }
