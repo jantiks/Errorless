@@ -12,5 +12,11 @@ struct BaseResponseBody: Decodable {
 }
 
 class BaseRequestBody: Encodable {
-    let date = Date()
+    let date = Date().toString()
+}
+
+extension Date {
+    func toString() -> String {
+        return DateFormatter().string(from: self)
+    }
 }
