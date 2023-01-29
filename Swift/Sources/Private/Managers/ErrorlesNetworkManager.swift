@@ -77,8 +77,7 @@ class ErrorlesNetworkManager {
             return
         }
 
-        let urlSession = URLSession.shared.dataTask(with: request) { data, response, error in
-            
+        URLSession.shared.dataTask(with: request) { data, response, error in
             defer {
                 self.request = Request()
             }
@@ -102,10 +101,7 @@ class ErrorlesNetworkManager {
                 debugPrint("Could not translate the data to the requested type. Reason: \(error.localizedDescription)")
                 completion?(.failure(error))
             }
-        }
-
-        // Start the request
-        urlSession.resume()
+        }.resume()
     }
     
     private func initalizeRequest() -> URLRequest? {

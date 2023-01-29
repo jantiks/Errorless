@@ -11,12 +11,10 @@ struct BaseResponseBody: Decodable {
     let message: String?
 }
 
-class BaseRequestBody: Encodable {
-    let date = Date().toString()
-}
-
 extension Date {
     func toString() -> String {
-        return DateFormatter().string(from: self)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss xxxx"
+        return formatter.string(from: self)
     }
 }

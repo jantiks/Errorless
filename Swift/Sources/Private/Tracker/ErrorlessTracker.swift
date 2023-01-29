@@ -18,12 +18,12 @@ struct ErrorlessTracker {
             .startRequest(ofType: BaseResponseBody.self, completion: completion)
     }
     
-    func track(_ event: TrackEvent) {
+    func track(_ event: TrackEvent, completion: ((Result<BaseResponseBody, Error>) -> Void)? = nil) {
         ErrorlesNetworkManager("event")
             .setHttpMethod(.post)
             .setJsonHeaders()
             .addAuthorization()
-            .setBody(TrackEventRequestBody(event: event.rawValue))
-            .startRequest(ofType: BaseResponseBody.self)
+            .setBody(TrackEventRequestBody(name: event.rawValue))
+            .startRequest(ofType: BaseResponseBody.self, completion: completion)
     }
 }

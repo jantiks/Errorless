@@ -11,20 +11,24 @@ enum TrackEvent: String {
     case viewDidLoad, viewWillAppear, viewWillDisappear, changeToPortrait, changeToLandscape
 }
 
-class TrackEventRequestBody: BaseRequestBody {
-    let event: String
+class TrackEventRequestBody: Encodable {
+    let date = Date().toString()
+    let name: String
+    let body: String
     
-    init(event: String) {
-        self.event = event
+    init(name: String, body: String = "") {
+        self.name = name
+        self.body = body
     }
 }
 
-class DumpRequestBody: BaseRequestBody {
-    let eventName: String
+class DumpRequestBody: Encodable {
+    let date = Date().toString()
+    let name: String
     let body: String
     
-    init(eventName: String, body: String) {
-        self.eventName = eventName
+    init(name: String, body: String) {
+        self.name = name
         self.body = body
     }
 }
