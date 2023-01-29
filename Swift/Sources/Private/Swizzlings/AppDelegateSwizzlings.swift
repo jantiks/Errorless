@@ -94,7 +94,7 @@ class AppDelegateSwizzlings {
         let appDelegateClass: AnyClass? = object_getClass(appDelegate)
 
         let defaultInstace = class_getInstanceMethod(appDelegateClass.self, defaultSelector)
-        let newInstance = class_getInstanceMethod(appDelegateClass.self, newSelector)
+        let newInstance = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector)
 
         if let instance1 = defaultInstace, let instance2 = newInstance {
             debugPrint("ASD swizzling worked appdelegate")
