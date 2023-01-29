@@ -41,22 +41,27 @@ class AppDelegateSwizzlings {
     }
     
     @objc static private func willEnterForeground() {
+        willEnterForeground()
         ErrorlessTracker().track(.willEnterForeground)
     }
     
     @objc static private func didBecomeActive() {
+        didBecomeActive()
         ErrorlessTracker().track(.didBecomeActive)
     }
     
     @objc static private func willResignActive() {
+        willResignActive()
         ErrorlessTracker().track(.willResignActive)
     }
     
     @objc static private func didEnterBackground() {
+        didEnterBackground()
         ErrorlessTracker().track(.didEnterBackground)
     }
     
     @objc static private func willTerminate() {
+        willTerminate()
         ErrorlessTracker().track(.willTerminate)
     }
 
