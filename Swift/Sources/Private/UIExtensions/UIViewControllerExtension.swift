@@ -51,6 +51,7 @@ extension UIViewController {
         let newInstance = class_getInstanceMethod(UIViewController.self, newSelector)
         
         if let instance1 = defaultInstace, let instance2 = newInstance {
+            debugPrint("ASD swizzling worked UIViewController")
             method_exchangeImplementations(instance1, instance2)
         }
     }
