@@ -18,7 +18,7 @@ class AppDelegateSwizzlings {
         swizzleApplicationWillResignActive()
     }
     
-    @objc private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    @objc static private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         struct Root: Codable {
             let title: String?
@@ -33,54 +33,53 @@ class AppDelegateSwizzlings {
         }
     }
     
-    @objc private func willEnterForeground() {
+    @objc static private func willEnterForeground() {
         ErrorlessTracker().track(.willEnterForeground)
     }
     
-    @objc private func didBecomeActive() {
+    @objc static private func didBecomeActive() {
         ErrorlessTracker().track(.didBecomeActive)
     }
     
-    @objc private func willResignActive() {
+    @objc static private func willResignActive() {
         ErrorlessTracker().track(.willResignActive)
     }
     
-    @objc private func didEnterBackground() {
+    @objc static private func didEnterBackground() {
         ErrorlessTracker().track(.didEnterBackground)
     }
     
-    @objc private func willTerminate() {
+    @objc static private func willTerminate() {
         ErrorlessTracker().track(.willTerminate)
     }
 
     private func swizzleDidReceiveRemoteNotification() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)), with: #selector(self.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)), with: #selector(AppDelegateSwizzlings.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
     }
     
     private func swizzleApplicationWillEnterForeground() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillEnterForeground(_:)), with: #selector(willEnterForeground))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillEnterForeground(_:)), with: #selector(AppDelegateSwizzlings.willEnterForeground))
     }
     
     private func swizzleApplicationDidBecomeActive() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), with: #selector(didBecomeActive))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), with: #selector(AppDelegateSwizzlings.didBecomeActive))
     }
     
     private func swizzleApplicationWillResignActive() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), with: #selector(willResignActive))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), with: #selector(AppDelegateSwizzlings.willResignActive))
     }
     
     private func swizzleApplicationDidEnterBackground() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidEnterBackground(_:)), with: #selector(didEnterBackground))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidEnterBackground(_:)), with: #selector(AppDelegateSwizzlings.didEnterBackground))
     }
     
     private func swizzleApplicationWillTerminate() {
-        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillTerminate(_:)), with: #selector(willTerminate))
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillTerminate(_:)), with: #selector(AppDelegateSwizzlings.willTerminate))
     }
     
     private func swizzle(defaultSelector: Selector, with newSelector: Selector) {
         let appDelegate = UIApplication.shared.delegate
         let appDelegateClass: AnyClass? = object_getClass(appDelegate)
-
 
         guard let newSelectorMethod = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
             return
