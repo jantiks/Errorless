@@ -40,28 +40,28 @@ class AppDelegateSwizzlings {
         }
     }
     
-    @objc private func willEnterForeground() {
-        willEnterForeground()
+    @objc private func willEnterForeground(_ application: UIApplication) {
+        willEnterForeground(application)
         ErrorlessTracker().track(.willEnterForeground)
     }
     
-    @objc private func didBecomeActive() {
-        didBecomeActive()
+    @objc private func didBecomeActive(_ application: UIApplication) {
+        didBecomeActive(application)
         ErrorlessTracker().track(.didBecomeActive)
     }
     
-    @objc private func willResignActive() {
-        willResignActive()
+    @objc private func willResignActive(_ application: UIApplication) {
+        willResignActive(application)
         ErrorlessTracker().track(.willResignActive)
     }
     
-    @objc private func didEnterBackground() {
-        didEnterBackground()
+    @objc private func didEnterBackground(_ application: UIApplication) {
+        didEnterBackground(application)
         ErrorlessTracker().track(.didEnterBackground)
     }
     
-    @objc private func willTerminate() {
-        willTerminate()
+    @objc private func willTerminate(_ application: UIApplication) {
+        willTerminate(application)
         ErrorlessTracker().track(.willTerminate)
     }
 
@@ -70,23 +70,23 @@ class AppDelegateSwizzlings {
     }
     
     private func swizzleApplicationWillEnterForeground() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillEnterForeground(_:)), with: #selector(willEnterForeground))
+        swizzle(defaultSelector: #selector(application.delegate!.applicationWillEnterForeground(_:)), with: #selector(willEnterForeground(_:)))
     }
     
     private func swizzleApplicationDidBecomeActive() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationDidBecomeActive(_:)), with: #selector(didBecomeActive))
+        swizzle(defaultSelector: #selector(application.delegate!.applicationDidBecomeActive(_:)), with: #selector(didBecomeActive(_:)))
     }
     
     private func swizzleApplicationWillResignActive() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillResignActive(_:)), with: #selector(willResignActive))
+        swizzle(defaultSelector: #selector(application.delegate!.applicationWillResignActive(_:)), with: #selector(willResignActive(_:)))
     }
     
     private func swizzleApplicationDidEnterBackground() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationDidEnterBackground(_:)), with: #selector(didEnterBackground))
+        swizzle(defaultSelector: #selector(application.delegate!.applicationDidEnterBackground(_:)), with: #selector(didEnterBackground(_:)))
     }
     
     private func swizzleApplicationWillTerminate() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillTerminate(_:)), with: #selector(willTerminate))
+        swizzle(defaultSelector: #selector(application.delegate!.applicationWillTerminate(_:)), with: #selector(willTerminate(_:)))
     }
     
     private func swizzle(defaultSelector: Selector, with newSelector: Selector) {
