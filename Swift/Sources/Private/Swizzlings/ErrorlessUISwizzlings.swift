@@ -13,7 +13,7 @@ struct ErrorlessUISwizzlings {
         UIViewController.startSwizzlingViewDidLoad()
         UIViewController.startSwizzlingViewWillAppear()
         UIViewController.startSwizzlingViewWillDisappear()
-        UIViewController.startSwizzlingViewDidLayoutSubviews()
+//        UIViewController.startSwizzlingViewDidLayoutSubviews()
     }
 }
 #endif
