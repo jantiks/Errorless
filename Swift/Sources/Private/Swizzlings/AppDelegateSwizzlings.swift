@@ -25,7 +25,7 @@ class AppDelegateSwizzlings {
         swizzleApplicationWillResignActive()
     }
     
-    @objc static private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    @objc private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         struct Root: Codable {
             let title: String?
