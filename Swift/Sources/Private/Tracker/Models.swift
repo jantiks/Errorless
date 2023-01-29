@@ -8,10 +8,20 @@
 import Foundation
 
 enum TrackEvent: String {
-    case viewDidLoad, viewWillAppear, viewWillDisappear, changeToPortrait, changeToLandscape
+    case viewDidLoad
+    case viewWillAppear
+    case viewWillDisappear
+    case viewDidLayoutSubviews
+    case changeToPortrait
+    case changeToLandscape
+    case willEnterForeground
+    case didBecomeActive
+    case willResignActive
+    case didEnterBackground
+    case willTerminate
 }
 
-class TrackEventRequestBody: Encodable {
+struct TrackEventRequestBody: Encodable {
     let date = Date().toString()
     let name: String
     let body: String
@@ -22,7 +32,7 @@ class TrackEventRequestBody: Encodable {
     }
 }
 
-class DumpRequestBody: Encodable {
+struct DumpRequestBody: Encodable {
     let date = Date().toString()
     let name: String
     let body: String
@@ -31,4 +41,10 @@ class DumpRequestBody: Encodable {
         self.name = name
         self.body = body
     }
+}
+
+struct RecieveNotificationRequestBody: Encodable {
+    let date = Date().toString()
+    let title: String?
+    let message: String?
 }

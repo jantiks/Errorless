@@ -1,0 +1,98 @@
+//
+//  File.swift
+//  
+//
+//  Created by Tigran on 29.01.23.
+//
+
+import Foundation
+
+#if canImport(UIKit)
+import UIKit
+
+class AppDelegateSwizzlings {
+    func swizzle() {
+        swizzleDidReceiveRemoteNotification()
+        swizzleApplicationDidBecomeActive()
+        swizzleApplicationWillEnterForeground()
+        swizzleApplicationWillResignActive()
+    }
+    
+    @objc private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        struct Root: Codable {
+            let title: String?
+            let message: String?
+        }
+        
+        if let str = userInfo["data"] as? String {
+            let res = try? JSONDecoder().decode(Root.self, from: str.data(using: .utf8)!)
+            ErrorlessTracker().trackRecieveNotification(body: RecieveNotificationRequestBody(title: res?.title, message: res?.message))
+        } else {
+            ErrorlessTracker().trackRecieveNotification(body: RecieveNotificationRequestBody(title: nil, message: nil))
+        }
+    }
+    
+    @objc private func willEnterForeground() {
+        ErrorlessTracker().track(.willEnterForeground)
+    }
+    
+    @objc private func didBecomeActive() {
+        ErrorlessTracker().track(.didBecomeActive)
+    }
+    
+    @objc private func willResignActive() {
+        ErrorlessTracker().track(.willResignActive)
+    }
+    
+    @objc private func didEnterBackground() {
+        ErrorlessTracker().track(.didEnterBackground)
+    }
+    
+    @objc private func willTerminate() {
+        ErrorlessTracker().track(.willTerminate)
+    }
+
+    private func swizzleDidReceiveRemoteNotification() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)), with: #selector(self.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
+    }
+    
+    private func swizzleApplicationWillEnterForeground() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillEnterForeground(_:)), with: #selector(willEnterForeground))
+    }
+    
+    private func swizzleApplicationDidBecomeActive() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), with: #selector(didBecomeActive))
+    }
+    
+    private func swizzleApplicationWillResignActive() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), with: #selector(willResignActive))
+    }
+    
+    private func swizzleApplicationDidEnterBackground() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationDidEnterBackground(_:)), with: #selector(didEnterBackground))
+    }
+    
+    private func swizzleApplicationWillTerminate() {
+        swizzle(defaultSelector: #selector(UIApplicationDelegate.applicationWillTerminate(_:)), with: #selector(willTerminate))
+    }
+    
+    private func swizzle(defaultSelector: Selector, with newSelector: Selector) {
+        let appDelegate = UIApplication.shared.delegate
+        let appDelegateClass: AnyClass? = object_getClass(appDelegate)
+
+
+        guard let newSelectorMethod = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
+            return
+        }
+
+        if let originalMethod = class_getInstanceMethod(appDelegateClass, defaultSelector)  {
+            // exchange implementation
+            method_exchangeImplementations(originalMethod, newSelectorMethod)
+        } else {
+            // add implementation
+            class_addMethod(appDelegateClass, newSelector, method_getImplementation(newSelectorMethod), method_getTypeEncoding(newSelectorMethod))
+        }
+    }
+}
+#endif

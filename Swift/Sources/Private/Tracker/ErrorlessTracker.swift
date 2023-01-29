@@ -18,6 +18,15 @@ struct ErrorlessTracker {
             .startRequest(ofType: BaseResponseBody.self, completion: completion)
     }
     
+    func trackRecieveNotification(body: RecieveNotificationRequestBody, completion: ((Result<BaseResponseBody, Error>) -> Void)? = nil) {
+        ErrorlesNetworkManager("notification")
+            .setHttpMethod(.post)
+            .setJsonHeaders()
+            .addAuthorization()
+            .setBody(body)
+            .startRequest(ofType: BaseResponseBody.self, completion: completion)
+    }
+    
     func track(_ event: TrackEvent, completion: ((Result<BaseResponseBody, Error>) -> Void)? = nil) {
         ErrorlesNetworkManager("event")
             .setHttpMethod(.post)

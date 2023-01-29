@@ -22,19 +22,28 @@ extension UIViewController {
         swizzle(defaultSelector: #selector(viewWillAppear), with: #selector(viewWillAppearSwizzlingMethod))
     }
     
-    @objc func viewDidLoadSwizzlingMethod() {
+    static func startSwizzlingViewDidLayoutSubviews() {
+        swizzle(defaultSelector: #selector(viewDidLayoutSubviews), with: #selector(viewDidLayoutSubviewsSwizzlingMethod))
+    }
+    
+    @objc private func viewDidLoadSwizzlingMethod() {
         viewDidLoadSwizzlingMethod()
         ErrorlessTracker().track(.viewDidLoad)
     }
     
-    @objc func viewWillAppearSwizzlingMethod() {
+    @objc private func viewWillAppearSwizzlingMethod() {
         viewWillAppearSwizzlingMethod()
         ErrorlessTracker().track(.viewWillAppear)
     }
     
-    @objc func viewWillDisappearSwizzlingMethod() {
+    @objc private func viewWillDisappearSwizzlingMethod() {
         viewWillDisappearSwizzlingMethod()
         ErrorlessTracker().track(.viewWillDisappear)
+    }
+    
+    @objc private func viewDidLayoutSubviewsSwizzlingMethod() {
+        viewDidLayoutSubviewsSwizzlingMethod()
+        ErrorlessTracker().track(.viewDidLayoutSubviews)
     }
     
     static func swizzle(defaultSelector: Selector, with newSelector: Selector) {

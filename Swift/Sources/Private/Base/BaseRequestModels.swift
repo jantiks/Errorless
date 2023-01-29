@@ -10,11 +10,3 @@ import Foundation
 struct BaseResponseBody: Decodable {
     let message: String?
 }
-
-extension Date {
-    func toString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss xxxx"
-        return formatter.string(from: self)
-    }
-}
