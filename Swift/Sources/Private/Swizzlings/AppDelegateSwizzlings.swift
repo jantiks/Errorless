@@ -81,16 +81,11 @@ class AppDelegateSwizzlings {
         let appDelegate = UIApplication.shared.delegate
         let appDelegateClass: AnyClass? = object_getClass(appDelegate)
 
-        guard let newSelectorMethod = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
-            return
-        }
+        let defaultInstace = class_getInstanceMethod(appDelegateClass.self, defaultSelector)
+        let newInstance = class_getInstanceMethod(appDelegateClass.self, newSelector)
 
-        if let originalMethod = class_getInstanceMethod(appDelegateClass, defaultSelector)  {
-            // exchange implementation
-            method_exchangeImplementations(originalMethod, newSelectorMethod)
-        } else {
-            // add implementation
-            class_addMethod(appDelegateClass, newSelector, method_getImplementation(newSelectorMethod), method_getTypeEncoding(newSelectorMethod))
+        if let instance1 = defaultInstace, let instance2 = newInstance {
+            method_exchangeImplementations(instance1, instance2)
         }
     }
 }
