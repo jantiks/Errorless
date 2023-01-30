@@ -1,6 +1,7 @@
+
 //
 //  File.swift
-//  
+//
 //
 //  Created by Tigran on 29.01.23.
 //
@@ -41,27 +42,22 @@ class AppDelegateSwizzlings {
     }
     
     @objc private func willEnterForeground(_ application: UIApplication) {
-        willEnterForeground(application)
         ErrorlessTracker().track(.willEnterForeground)
     }
     
     @objc private func didBecomeActive(_ application: UIApplication) {
-        didBecomeActive(application)
         ErrorlessTracker().track(.didBecomeActive)
     }
     
     @objc private func willResignActive(_ application: UIApplication) {
-        willResignActive(application)
         ErrorlessTracker().track(.willResignActive)
     }
     
     @objc private func didEnterBackground(_ application: UIApplication) {
-        didEnterBackground(application)
         ErrorlessTracker().track(.didEnterBackground)
     }
     
     @objc private func willTerminate(_ application: UIApplication) {
-        willTerminate(application)
         ErrorlessTracker().track(.willTerminate)
     }
 
@@ -92,7 +88,7 @@ class AppDelegateSwizzlings {
     private func swizzle(defaultSelector: Selector, with newSelector: Selector) {
         let appDelegate = application.delegate!
         let appDelegateClass: AnyClass? = object_getClass(appDelegate)
-
+        
         let defaultInstace = class_getInstanceMethod(appDelegateClass.self, defaultSelector)
 
         guard let newInstance = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
