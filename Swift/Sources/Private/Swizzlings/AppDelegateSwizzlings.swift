@@ -94,11 +94,18 @@ class AppDelegateSwizzlings {
         let appDelegateClass: AnyClass? = object_getClass(appDelegate)
 
         let defaultInstace = class_getInstanceMethod(appDelegateClass.self, defaultSelector)
-        let newInstance = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector)
 
-        if let instance1 = defaultInstace, let instance2 = newInstance {
+        guard let newInstance = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
+            return
+        }
+        
+        if let defaultInstace = defaultInstace {
             debugPrint("ASD swizzling worked appdelegate")
-            method_exchangeImplementations(instance1, instance2)
+            method_exchangeImplementations(defaultInstace, newInstance)
+        } else {
+            // add implementation
+            debugPrint("ASD Add Implementation worked appdelegate")
+            class_addMethod(appDelegateClass, newSelector, method_getImplementation(newInstance), method_getTypeEncoding(newInstance))
         }
     }
 }
