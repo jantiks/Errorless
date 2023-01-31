@@ -12,7 +12,7 @@ public struct ErrorlesSDK {
         ErrorlessUISwizzlings().swizzle()
         AppDelegateSwizzlings().swizzle()
         if #available(iOS 13.0, *) {
-            SceneDelegateSwizzlings().swizzle()
+            SceneDelegateSwizzlings.shared.swizzle()
         }
         ErrorlesNetworkManager.k_BASE_URL = apiKey
         ErrorlesCrashReporter().initalize()

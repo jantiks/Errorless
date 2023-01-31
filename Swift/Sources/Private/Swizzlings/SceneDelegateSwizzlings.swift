@@ -9,7 +9,11 @@ import UIKit
 
 @available(iOS 13.0, *)
 final class SceneDelegateSwizzlings {
+    
+    static let shared = SceneDelegateSwizzlings()
+    
     func swizzle() {
+        print("asd swizzle")
         NotificationCenter.default.addObserver(self, selector: #selector(testObserver), name: NSNotification.Name(rawValue: "NotificationIdentifier"), object: nil)
         if UIApplication.shared.connectedScenes.isEmpty {
             NotificationCenter.default.addObserver(self, selector: #selector(sceneWillConnect(_:)), name: UIScene.willConnectNotification, object: nil)
@@ -24,7 +28,7 @@ final class SceneDelegateSwizzlings {
     
     @objc private func sceneWillConnect(_ notification: Notification) {
         NotificationCenter.default.removeObserver(self)
-        
+
         UIApplication.shared.connectedScenes.forEach({ [weak self] in
             guard let self = self else { return }
             if let sceneDeleage = $0.delegate, let sceneDelegateClass = object_getClass(sceneDeleage) {
