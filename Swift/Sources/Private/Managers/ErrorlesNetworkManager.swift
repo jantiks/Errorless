@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ErrorlesNetworkManager {
+final class ErrorlesNetworkManager {
     
     private var request: Request = Request()
     static var k_BASE_URL = "http://127.0.0.1:8000/"

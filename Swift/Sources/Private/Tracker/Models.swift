@@ -19,6 +19,7 @@ enum TrackEvent: String {
     case willResignActive
     case didEnterBackground
     case willTerminate
+    case sceneDidDisconnect
 }
 
 struct TrackEventRequestBody: Encodable {

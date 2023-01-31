@@ -6,24 +6,20 @@
 //  Created by Tigran on 29.01.23.
 //
 
-import Foundation
-
 #if canImport(UIKit)
 import UIKit
 
-class AppDelegateSwizzlings {
-    
-    private let application: UIApplication
-    
-    init(_ application: UIApplication) {
-        self.application = application
-    }
+final class AppDelegateSwizzlings {
     
     func swizzle() {
-        swizzleDidReceiveRemoteNotification()
-        swizzleApplicationDidBecomeActive()
-        swizzleApplicationWillEnterForeground()
-        swizzleApplicationWillResignActive()
+        guard let appDelegate = UIApplication.shared.delegate, let appDelegateClass = object_getClass(appDelegate) else { return }
+        
+        swizzleDidReceiveRemoteNotification(appDelegateClass, delegate: appDelegate)
+        swizzleApplicationDidBecomeActive(appDelegateClass, delegate: appDelegate)
+        swizzleApplicationWillEnterForeground(appDelegateClass, delegate: appDelegate)
+        swizzleApplicationWillResignActive(appDelegateClass, delegate: appDelegate)
+        swizzleApplicationDidEnterBackground(appDelegateClass, delegate: appDelegate)
+        swizzleApplicationWillTerminate(appDelegateClass, delegate: appDelegate)
     }
     
     @objc private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -61,48 +57,28 @@ class AppDelegateSwizzlings {
         ErrorlessTracker().track(.willTerminate)
     }
 
-    private func swizzleDidReceiveRemoteNotification() {
-        swizzle(defaultSelector: #selector(application.delegate!.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)), with: #selector(application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
+    private func swizzleDidReceiveRemoteNotification(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)), newClass: AppDelegateSwizzlings.self, with: #selector(application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
     }
     
-    private func swizzleApplicationWillEnterForeground() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillEnterForeground(_:)), with: #selector(willEnterForeground(_:)))
+    private func swizzleApplicationWillEnterForeground(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.applicationWillEnterForeground(_:)), newClass: AppDelegateSwizzlings.self, with: #selector(willEnterForeground(_:)))
     }
     
-    private func swizzleApplicationDidBecomeActive() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationDidBecomeActive(_:)), with: #selector(didBecomeActive(_:)))
+    private func swizzleApplicationDidBecomeActive(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.applicationDidBecomeActive(_:)), newClass: AppDelegateSwizzlings.self, with: #selector(didBecomeActive(_:)))
     }
     
-    private func swizzleApplicationWillResignActive() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillResignActive(_:)), with: #selector(willResignActive(_:)))
+    private func swizzleApplicationWillResignActive(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.applicationWillResignActive(_:)), newClass: AppDelegateSwizzlings.self, with: #selector(willResignActive(_:)))
     }
     
-    private func swizzleApplicationDidEnterBackground() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationDidEnterBackground(_:)), with: #selector(didEnterBackground(_:)))
+    private func swizzleApplicationDidEnterBackground(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.applicationDidEnterBackground(_:)), newClass: AppDelegateSwizzlings.self, with: #selector(didEnterBackground(_:)))
     }
     
-    private func swizzleApplicationWillTerminate() {
-        swizzle(defaultSelector: #selector(application.delegate!.applicationWillTerminate(_:)), with: #selector(willTerminate(_:)))
-    }
-    
-    private func swizzle(defaultSelector: Selector, with newSelector: Selector) {
-        let appDelegate = application.delegate!
-        let appDelegateClass: AnyClass? = object_getClass(appDelegate)
-        
-        let defaultInstace = class_getInstanceMethod(appDelegateClass.self, defaultSelector)
-
-        guard let newInstance = class_getInstanceMethod(AppDelegateSwizzlings.self, newSelector) else {
-            return
-        }
-        
-        if let defaultInstace = defaultInstace {
-            debugPrint("ASD swizzling worked appdelegate")
-            method_exchangeImplementations(defaultInstace, newInstance)
-        } else {
-            // add implementation
-            debugPrint("ASD Add Implementation worked appdelegate")
-            class_addMethod(appDelegateClass, newSelector, method_getImplementation(newInstance), method_getTypeEncoding(newInstance))
-        }
+    private func swizzleApplicationWillTerminate(_ appDelegateClass: AnyClass, delegate: UIApplicationDelegate) {
+        SceneSwizzlingHelper.swizzle(defaultClass: appDelegateClass, defaultSelector: #selector(delegate.applicationWillTerminate(_:)), newClass: AppDelegateSwizzlings.self, with: #selector(willTerminate(_:)))
     }
 }
 #endif

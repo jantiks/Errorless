@@ -2,17 +2,18 @@ import UIKit
 
 public struct ErrorlesSDK {
     private let apiKey: String
-    private let application: UIApplication
     
-    public init(apiKey: String, application: UIApplication) {
+    public init(apiKey: String, launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         self.apiKey = apiKey
-        self.application = application
     }
     
     public func initalizeSDK() {
         ErrorlesNotificationService().initalize()
         ErrorlessUISwizzlings().swizzle()
-        AppDelegateSwizzlings(application).swizzle()
+        AppDelegateSwizzlings().swizzle()
+        if #available(iOS 13.0, *) {
+            SceneDelegateSwizzlings().swizzle()
+        }
         ErrorlesNetworkManager.k_BASE_URL = apiKey
         ErrorlesCrashReporter().initalize()
     }

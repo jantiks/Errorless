@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ErrorlesNotificationService {
+final class ErrorlesNotificationService {
     func initalize() {
         NotificationCenter.default.addObserver(self, selector: #selector(ErrorlesNotificationService.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
