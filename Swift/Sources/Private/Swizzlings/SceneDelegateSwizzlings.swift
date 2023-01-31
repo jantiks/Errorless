@@ -11,13 +11,13 @@ import UIKit
 final class SceneDelegateSwizzlings {
     func swizzle() {
         if UIApplication.shared.connectedScenes.isEmpty {
-            NotificationCenter.default.addObserver(self, selector: #selector(sceneWillConnect), name: UIScene.willConnectNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(sceneWillConnect(_:)), name: UIScene.willConnectNotification, object: nil)
         } else {
-            sceneWillConnect()
+            sceneWillConnect(Notification(name: UIScene.willConnectNotification))
         }
     }
     
-    @objc private func sceneWillConnect() {
+    @objc private func sceneWillConnect(_ notification: Notification) {
         NotificationCenter.default.removeObserver(self)
         
         UIApplication.shared.connectedScenes.forEach({ [weak self] in
