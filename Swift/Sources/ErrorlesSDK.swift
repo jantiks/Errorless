@@ -16,5 +16,9 @@ public struct ErrorlesSDK {
         }
         ErrorlesNetworkManager.k_BASE_URL = apiKey
         ErrorlesCrashReporter().initalize()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil)
+
+        })
     }
 }

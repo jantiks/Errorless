@@ -10,11 +10,16 @@ import UIKit
 @available(iOS 13.0, *)
 final class SceneDelegateSwizzlings {
     func swizzle() {
+        NotificationCenter.default.addObserver(self, selector: #selector(testObserver), name: NSNotification.Name(rawValue: "NotificationIdentifier"), object: nil)
         if UIApplication.shared.connectedScenes.isEmpty {
             NotificationCenter.default.addObserver(self, selector: #selector(sceneWillConnect(_:)), name: UIScene.willConnectNotification, object: nil)
         } else {
             sceneWillConnect(Notification(name: UIScene.willConnectNotification))
         }
+    }
+    
+    @objc private func testObserver() {
+        print("asd called test post notification")
     }
     
     @objc private func sceneWillConnect(_ notification: Notification) {
