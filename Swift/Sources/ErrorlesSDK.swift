@@ -8,17 +8,10 @@ public struct ErrorlesSDK {
     }
     
     public func initalizeSDK() {
-        ErrorlesNotificationService().initalize()
         ErrorlessUISwizzlings().swizzle()
         AppDelegateSwizzlings().swizzle()
-        if #available(iOS 13.0, *) {
-            SceneDelegateSwizzlings.shared.swizzle()
-        }
+        SharedObserver.shared.initalize()
         ErrorlesNetworkManager.k_BASE_URL = apiKey
         ErrorlesCrashReporter().initalize()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil)
-
-        })
     }
 }

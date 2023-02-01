@@ -20,6 +20,11 @@ enum TrackEvent: String {
     case didEnterBackground
     case willTerminate
     case sceneDidDisconnect
+    case didTakeScreeshot
+    case callDisconnected
+    case callDialing
+    case incomingCall
+    case callConnected
 }
 
 struct TrackEventRequestBody: Encodable {
