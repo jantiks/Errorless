@@ -13,5 +13,7 @@ public struct ErrorlesSDK {
         SharedObserver.shared.initalize()
         ErrorlesNetworkManager.k_BASE_URL = apiKey
         ErrorlesCrashReporter().initalize()
+        ErrorlessVolumeDetectorCommand().execute()
+        DetectJailBreakCommand().execute()
     }
 }

@@ -25,14 +25,28 @@ enum TrackEvent: String {
     case callDialing
     case incomingCall
     case callConnected
+    case isJailBroken
+    case notJailBroken
+    case storage
 }
 
 struct TrackEventRequestBody: Encodable {
     let date = Date().toString()
     let name: String
-    let body: String
+    let body: [String: String]
     
-    init(name: String, body: String = "") {
+    init(name: String, body: [String: String] = [:]) {
+        self.name = name
+        self.body = body
+    }
+}
+
+struct AbstractTrackEventRequestBody: Encodable {
+    let date = Date().toString()
+    let name: String
+    let body: Data
+    
+    init(name: String, body: Data) {
         self.name = name
         self.body = body
     }
@@ -41,9 +55,9 @@ struct TrackEventRequestBody: Encodable {
 struct DumpRequestBody: Encodable {
     let date = Date().toString()
     let name: String
-    let body: String
+    let body: [String: String]
     
-    init(name: String, body: String) {
+    init(name: String, body: [String: String]) {
         self.name = name
         self.body = body
     }

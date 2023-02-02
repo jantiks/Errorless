@@ -91,6 +91,6 @@ struct ErrorlesCrashReporter {
 //        }.resume()
 //
 //
-        ErrorlessTracker().dump(DumpRequestBody(name: "CrashReporter", body: info))
+        ErrorlessTracker().dump(DumpRequestBody(name: "CrashReporter", body: ["info": "\(info)"]))
     }
 }

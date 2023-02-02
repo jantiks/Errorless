@@ -23,6 +23,7 @@ final class ErrorlesNetworkManager {
         case invalidResponse
         case invalidStatusCode(Int)
         case invalidRequest
+        case invalidBody
     }
     
     enum HttpMethod: String {
